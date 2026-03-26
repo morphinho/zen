@@ -1,0 +1,12 @@
+UPDATE pilates_classes SET video_url = 'https://www.youtube.com/watch?v=j7etMYOtUsg' WHERE day_number = 7;
+UPDATE pilates_classes SET video_url = 'https://www.youtube.com/watch?v=yeD71fbMkCk' WHERE day_number = 8;
+UPDATE pilates_classes SET video_url = 'https://www.youtube.com/watch?v=_0QqnrjoBSM' WHERE day_number = 9;
+UPDATE pilates_classes SET video_url = 'https://www.youtube.com/watch?v=DbBQtBpyCto' WHERE day_number = 10;
+UPDATE pilates_classes SET video_url = 'https://www.youtube.com/watch?v=TKzWDdfq6rg' WHERE day_number = 11;
+UPDATE pilates_classes SET video_url = 'https://www.youtube.com/watch?v=FaMeexE2pGA' WHERE day_number = 12;
+UPDATE pilates_classes SET video_url = 'https://www.youtube.com/watch?v=O5AS9JCUhO4' WHERE day_number = 13;
+UPDATE pilates_classes SET video_url = 'https://www.youtube.com/watch?v=yrG4C-p-UCY' WHERE day_number = 14;
+UPDATE pilates_classes SET video_url = 'https://www.youtube.com/watch?v=vm4tum4YIrM' WHERE day_number = 15;
+UPDATE pilates_classes SET video_url = 'https://www.youtube.com/watch?v=JBZXmPnylLI' WHERE day_number = 16;
+UPDATE pilates_classes SET video_url = 'https://www.youtube.com/watch?v=4-oXmGZv9DM' WHERE day_number = 17;
+UPDATE pilates_classes SET video_url = 'https://www.youtube.com/watch?v=6AZzGIA3h-g' WHERE day_number = 18;

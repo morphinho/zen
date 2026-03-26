@@ -1,0 +1,1 @@
+UPDATE email_send_state SET retry_after_until = NULL, batch_size = 1, send_delay_ms = 2000, updated_at = now() WHERE id = 1;
