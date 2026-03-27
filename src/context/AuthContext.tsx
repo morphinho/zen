@@ -1,7 +1,5 @@
-import { createContext, useContext, ReactNode } from "react";
-// DEV MODE — imports originais comentados
-// import { useState, useEffect } from "react";
-// import { supabase } from "@/integrations/supabase/client";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
 
 interface AuthContextType {
@@ -20,38 +18,41 @@ export const useAuth = () => {
   return ctx;
 };
 
-// DEV MODE — usuário fake sempre logado
-const DEV_USER = {
-  id: "dev-user-123",
-  email: "dev@test.com",
-  aud: "authenticated",
-  role: "authenticated",
-  app_metadata: {},
-  user_metadata: {},
-  created_at: new Date().toISOString(),
-} as unknown as User;
-
-const DEV_SESSION = {
-  access_token: "dev-token",
-  refresh_token: "dev-refresh",
-  expires_in: 999999,
-  token_type: "bearer",
-  user: DEV_USER,
-} as unknown as Session;
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  // DEV MODE — sem useState/useEffect, valores fixos
-  const session = DEV_SESSION;
-  const user = DEV_USER;
-  const loading = false;
+  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // DEV MODE — funções de auth são no-ops
-  const signInWithEmail = async (_email: string) => {
-    console.log("DEV MODE: signInWithEmail is a no-op");
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const signInWithEmail = async (email: string) => {
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        shouldCreateUser: true,
+        emailRedirectTo: window.location.origin + '/dashboard',
+      },
+    });
+    if (error) throw error;
   };
 
   const signOut = async () => {
-    console.log("DEV MODE: signOut is a no-op");
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
   };
 
   return (

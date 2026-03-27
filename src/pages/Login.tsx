@@ -95,15 +95,6 @@ const Login = () => {
         Unesite svoju e-mail adresu za pristup.
       </p>
 
-      {/* DEV MODE — botão para entrar direto sem autenticação */}
-      <Button
-        type="button"
-        variant="outline"
-        className="mt-4 w-full max-w-xs h-12 rounded-2xl text-sm border-dashed border-2 border-orange-400 text-orange-600"
-        onClick={() => navigate("/dashboard", { replace: true })}
-      >
-        🔧 Uđi kao dev (bez autentifikacije)
-      </Button>
     </div>
   );
 };

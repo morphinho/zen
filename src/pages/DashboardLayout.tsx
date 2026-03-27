@@ -14,20 +14,33 @@ export const SubscriptionContext = ({ children, subscription }: { children: Reac
 };
 
 const DashboardLayout = () => {
-  // DEV MODE — ignorar auth e subscription check
-  const { user } = useAuth();
-  const { loadingData } = useAppState();
+  const { user, loading: authLoading } = useAuth();
+  const { hasCompletedOnboarding, loadingData } = useAppState();
+  const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null);
+  const [checkingSub, setCheckingSub] = useState(true);
 
-  // DEV MODE — subscription fake com acesso total
-  const subscription: SubscriptionStatus = {
-    hasZenLifeAccess: true,
-    hasNutriZenAccess: true,
-    status: "ACTIVE",
-    subscriptionType: "NUTRIZEN",
-    nextChargeDate: null,
-  };
+  useEffect(() => {
+    if (!user) {
+      setCheckingSub(false);
+      return;
+    }
+    checkUserSubscription(user.id).then((result) => {
+      setSubscription(result);
+      setCheckingSub(false);
+    });
+  }, [user]);
 
-  // DEV MODE — removido: redirect para /login, checkingSub, authLoading guard
+  if (authLoading || checkingSub) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
   if (loadingData) {
     return (
