@@ -36,31 +36,17 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      // 1. Verify if email has a Hotmart purchase
-      const { data, error: fnError } = await supabase.functions.invoke("verify-purchase", {
-        body: { email: email.trim() },
-      });
-
-      if (fnError) {
-        throw new Error("Greška pri provjeri kupnje. Pokušajte ponovo.");
-      }
-
-      if (!data?.verified) {
-        toast.error("Greška pri provjeri. Pokušajte ponovo.");
-        setLoading(false);
-        return;
-      }
-
-      // 2. Purchase verified — use token to sign in directly
-      const { error } = await supabase.auth.verifyOtp({
-        token_hash: data.token_hash,
-        type: "magiclink",
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: {
+          shouldCreateUser: true,
+          emailRedirectTo: window.location.origin + '/dashboard',
+        },
       });
 
       if (error) throw error;
 
-      toast.success("Dobrodošla! Prijavljivanje...");
-      navigate("/dashboard", { replace: true });
+      toast.success("Provjerite svoju e-poštu za link za prijavu!");
     } catch (error: any) {
       toast.error(error.message || "Greška pri prijavi");
     } finally {
