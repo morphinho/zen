@@ -1,5 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { createContext, useContext, ReactNode } from "react";
 import { Session, User } from "@supabase/supabase-js";
 
 interface AuthContextType {
@@ -18,42 +17,31 @@ export const useAuth = () => {
   return ctx;
 };
 
+const GUEST_USER = {
+  id: "guest-user",
+  email: "guest@zeenlife.life",
+  aud: "authenticated",
+  role: "authenticated",
+  app_metadata: {},
+  user_metadata: {},
+  created_at: new Date().toISOString(),
+} as unknown as User;
+
+const GUEST_SESSION = {
+  access_token: "guest-token",
+  refresh_token: "guest-refresh",
+  expires_in: 999999,
+  token_type: "bearer",
+  user: GUEST_USER,
+} as unknown as Session;
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const session = GUEST_SESSION;
+  const user = GUEST_USER;
+  const loading = false;
 
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const signInWithEmail = async (email: string) => {
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        shouldCreateUser: true,
-        emailRedirectTo: https://zeenlife.life/dashboard,
-      },
-    });
-    if (error) throw error;
-  };
-
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-  };
+  const signInWithEmail = async (_email: string) => {};
+  const signOut = async () => {};
 
   return (
     <AuthContext.Provider value={{ session, user, loading, signInWithEmail, signOut }}>

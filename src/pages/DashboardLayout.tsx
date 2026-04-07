@@ -1,46 +1,24 @@
 import { AppHeader } from "@/components/dashboard/AppHeader";
 import { BottomNav } from "@/components/dashboard/BottomNav";
-import { Outlet, Navigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+import { Outlet } from "react-router-dom";
 import { useAppState } from "@/context/AppContext";
-import { Loader2, Lock, MessageCircle } from "lucide-react";
-import { useEffect, useState } from "react";
-import { checkUserSubscription, SubscriptionStatus } from "@/lib/checkSubscription";
-import { Button } from "@/components/ui/button";
-import zenlifeLogo from "@/assets/zenlife-logo.svg";
+import { Loader2 } from "lucide-react";
+import { SubscriptionStatus } from "@/lib/checkSubscription";
 
 export const SubscriptionContext = ({ children, subscription }: { children: React.ReactNode; subscription: SubscriptionStatus | null }) => {
   return <>{children}</>;
 };
 
 const DashboardLayout = () => {
-  const { user, loading: authLoading } = useAuth();
-  const { hasCompletedOnboarding, loadingData } = useAppState();
-  const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null);
-  const [checkingSub, setCheckingSub] = useState(true);
+  const { loadingData } = useAppState();
 
-  useEffect(() => {
-    if (!user) {
-      setCheckingSub(false);
-      return;
-    }
-    checkUserSubscription(user.id).then((result) => {
-      setSubscription(result);
-      setCheckingSub(false);
-    });
-  }, [user]);
-
-  if (authLoading || checkingSub) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="w-6 h-6 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+  const subscription: SubscriptionStatus = {
+    hasZenLifeAccess: true,
+    hasNutriZenAccess: true,
+    status: "ACTIVE",
+    subscriptionType: "NUTRIZEN",
+    nextChargeDate: null,
+  };
 
   if (loadingData) {
     return (
