@@ -188,7 +188,7 @@ const DashboardHome = () => {
             {nextClass.video_url ? (
               <>
                 <img
-                  src={`https://img.youtube.com/vi/${new URL(nextClass.video_url).searchParams.get('v')}/hqdefault.jpg`}
+                  src={`https://img.youtube.com/vi/${(() => { const u = new URL(nextClass.video_url!); return u.hostname === 'youtu.be' ? u.pathname.slice(1) : u.searchParams.get('v'); })()}/hqdefault.jpg`}
                   alt={nextClass.title}
                   className="w-full h-full object-cover"
                 />

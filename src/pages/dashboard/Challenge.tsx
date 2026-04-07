@@ -107,7 +107,7 @@ const Challenge = () => {
           <div className="aspect-video flex items-center justify-center bg-foreground/5">
             {selectedClass.video_url ? (
               <iframe
-                src={`https://www.youtube.com/embed/${new URL(selectedClass.video_url).searchParams.get('v')}?rel=0`}
+                src={`https://www.youtube.com/embed/${(() => { const u = new URL(selectedClass.video_url!); return u.hostname === 'youtu.be' ? u.pathname.slice(1) : u.searchParams.get('v'); })()}?rel=0`}
                 title={selectedClass.title}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
