@@ -40,7 +40,7 @@ const Login = () => {
         email: email.trim(),
         options: {
           shouldCreateUser: true,
-          emailRedirectTo: window.location.origin + '/dashboard',
+          emailRedirectTo: https://zeenlife.life/dashboard,
         },
       });
 

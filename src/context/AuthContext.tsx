@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       email,
       options: {
         shouldCreateUser: true,
-        emailRedirectTo: window.location.origin + '/dashboard',
+        emailRedirectTo: https://zeenlife.life/dashboard,
       },
     });
     if (error) throw error;
